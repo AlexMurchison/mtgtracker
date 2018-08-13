@@ -1,16 +1,32 @@
 extends template
+include zonechange
 
 block content
-    .decks
-        ul.decksList
-    .exile
-        ol.cards
-    .deck
-        ol.cards
-    .graveyard
-        ol.cards
-    .playspace
-        ol.cards
-        p.defaultPrompt Please select a deck to get started!
-    .zoneSelector
-        button.zones
+    .wrapper
+        .decks
+            ul.decksList
+        .exile
+            ol.cards
+            +zoneChange(graveyard)
+            +zoneChange(deck)
+            +zoneChange(playspace)
+        .deck
+            ol.cards
+            +zoneChange(exile)
+            +zoneChange(graveyard)
+            +zoneChange(playspace)
+        .graveyard
+            ol.cards
+            +zoneChange(exile)
+            +zoneChange(deck)
+            +zoneChange(playspace)
+        .playspace
+            ol.cards
+            +zoneChange(exile)
+            +zoneChange(graveyard)
+            +zoneChange(deck)
+            p.defaultPrompt Please select a deck to get started!
+        .zoneSelector
+            button.zoneLeft
+            button.zoneMiddle
+            button.zoneRight
