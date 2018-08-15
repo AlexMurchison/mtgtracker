@@ -1,0 +1,15 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    style(type="text/css").
+      body { 
+        color:  black;
+      }
+    block scripts
+  body
+    block content
+      ul
+        each card in cards
+          li= card.name
+    block foot
