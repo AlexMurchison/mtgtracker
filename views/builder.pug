@@ -6,4 +6,10 @@
 extends template
 
 block content
-    .
+    .deckBuilder
+        form.cardInput(method='POST')
+            input.activePane#mainBoard(type="text")
+            input.inactivePane#sideBoard(type="text")
+            input#quantity(type="text")
+            input#cardName(type="text")
+            input#submit(type="submit")
