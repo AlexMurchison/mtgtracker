@@ -15,15 +15,22 @@ createDeck();
 let autocomplete = (input, array) => {
     let currentFocus;
     input.addEventListener("input", () => {
-        let parentBox, childBox, i, val = this.value;
+        let parentBox, childBox, i, userInput = this.value;
         closeAllLists();
-        if (!val) {
+        if (!userInput) {
             return false;
         };
         currentFocus = -1;
         parentBox = document.createElement('div');
-        parentBox.setAttribute("id", )
+        parentBox.setAttribute("id", this.id + "autocomplete-list");
+        parentBox.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(parentBox);
+        array.forEach(object => {
+            if (userInput.length <= 2) {
+                if (object.toUpperCase().includes(userInput.toUpperCase())) {
+                    childBox = document.createElement("div");
 
-
+                }
+            }
     })
-}
+})}
