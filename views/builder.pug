@@ -7,9 +7,11 @@ extends template
 
 block content
     .deckBuilder
-        form.cardInput(method='POST')
+        form.cardInput(method="POST")
+            input#title(type="text" placeholder="Deck Title")
             input.activePane#mainBoard(type="text")
             input.inactivePane#sideBoard(type="text")
-            input#quantity(type="text")
-            input#cardName(type="text")
-            input#submit(type="submit")
+            input#quantity(type="text" placeholder="Quantity")
+            input#cardName(type="text" placeholder="Card Name")
+            input#submit(type="submit") Submit
+    

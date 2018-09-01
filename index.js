@@ -10,7 +10,7 @@ app.set('view engine', 'pug');
 
 app.get('/', (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
-        console.log('Connected successfully to server!');
+        console.log('Connected successfully to Home!');
         const db = client.db('mtg');
         const collection = db.collection('cards');
 
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/tracker', (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
-        console.log('Connected successfully to server!');
+        console.log('Connected successfully to Tracker!');
         const db = client.db('mtg');
         const collection = db.collection('cards');
 
@@ -36,7 +36,7 @@ app.get('/tracker', (req, res) => {
 
 app.get('/builder', (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
-        console.log('Connected successfully to server!');
+        console.log('Connected successfully to Builder!');
         const db = client.db('mtg');
         const cards = db.collection('cards');
         
