@@ -11,12 +11,12 @@ Tracker page
     Deck Selector sidebar
     Decklist
         Import json object from database of user's deck
-            populates an array with objects of each card
+            populates an array with objects of each unique card
             Add "cardsinzone" property to object
         Buttons, each button gives -1 to cardsinzone
             +1 to cardsinzone in another location
     Graveyard
-         Import json object from database of user's deck
+            Import json object from database of user's deck
             populates an array with objects of each card
             Add "cardsinzone" property to object (will be 0 to start)
     Exile Zone
@@ -27,6 +27,8 @@ Tracker page
             Import json object from database of user's deck
             populates an array with objects of each card
             Add "cardsinzone" property to object (will be 0 to start)
+    Reshuffle Button
+            Shuffles Graveyard into Library
 
 Builder page
     Link to Tracker
