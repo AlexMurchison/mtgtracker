@@ -9,6 +9,10 @@ Home page
 Tracker page
     Link to Builder
     Deck Selector sidebar
+        Click on Deck in sidebar, retrieve deck object from db
+        Populate each zone with:
+            Objects for each unique card
+            3 Buttons for each unique card
     Decklist
         Import json object from database of user's deck
             populates an array with objects of each unique card
@@ -46,4 +50,11 @@ Database
         all cards in mtg, basic information like text, power/toughness, manacost
     users?
         usernames, decks, (stats?)
+
+app/server stuff
+    Builder
+        transactions
+            post completed deck to database, possibly to a user
+            get card info from db, put into "completed deck"
+            get card names for autocomplete/verification
 

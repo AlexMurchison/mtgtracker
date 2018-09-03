@@ -1,34 +1,39 @@
 extends template
 include mixins
 
+block head
+    script(src='/assets/js/tracker.js' defer)
+
 block content
     .wrapper
         .decks
             ul.decksList
+                //- each deck in userDecks
+                //-     li=deck
         .exile
-            ol.cards
-            +zoneChange(graveyard)
-            +zoneChange(deck)
-            +zoneChange(playspace)
-        .deck
-            ol.cards
-            +zoneChange(exile)
-            +zoneChange(graveyard)
-            +zoneChange(playspace)
+            ol.cards#exileCards Exile
+            +zoneChange('graveyard', 'Graveyard')
+            +zoneChange('deck', 'Library')
+            +zoneChange('playspace', 'Hand')
+        .library
+            ol.cards#libraryCards Library
+            +zoneChange('exile', 'Exile')
+            +zoneChange('graveyard', 'Graveyard')
+            +zoneChange('playspace', 'Hand')
         .graveyard
-            ol.cards
-            +zoneChange(exile)
-            +zoneChange(deck)
-            +zoneChange(playspace)
+            ol.cards#graveyardCards Graveyard
+            +zoneChange('exile', 'Exile')
+            +zoneChange('deck', 'Library')
+            +zoneChange('playspace', 'Hand')
         .playspace
-            ol.cards
-            +zoneChange(exile)
-            +zoneChange(graveyard)
-            +zoneChange(deck)
+            ol.cards#playspaceCards Playspace
+            +zoneChange('exile', 'Exile')
+            +zoneChange('graveyard', 'Graveyard')
+            +zoneChange('deck', 'Library')
             p.defaultPrompt Please select a deck to get started!
         .zoneSelector
-            button.zoneLeft
-            button.zoneMiddle
-            button.zoneRight
+            button.zoneLeft(type='button') Exile
+            button.zoneMiddle(type='button') Library
+            button.zoneRight(type='button') Graveyard
         .reshuffle
-            button.shuffler
+            button.shuffler(type='button') Reshuffle Graveyard

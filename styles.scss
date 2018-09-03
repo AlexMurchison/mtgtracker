@@ -2,6 +2,14 @@ $title-font: normal 24px/1.5 'Open Sans', sans-serif;
 $main-font: Helvetica, sans-serif;
 $primary-color: rgb(0, 0, 0);
 
+.hidden {
+  visibility: hidden
+}
+
+.error {
+  color: red;
+}
+
 h1.title {
   font: $title-font;
   color: $cool-red;

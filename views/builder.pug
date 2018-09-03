@@ -5,13 +5,25 @@
 
 extends template
 
+block head
+    script(src='/assets/js/builder.js' defer)
+
 block content
-    .deckBuilder
-        form.cardInput(method="POST")
-            input#title(type="text" placeholder="Deck Title")
-            input.activePane#mainBoard(type="text")
-            input.inactivePane#sideBoard(type="text")
-            input#quantity(type="text" placeholder="Quantity")
-            input#cardName(type="text" placeholder="Card Name")
-            input#submit(type="submit") Submit
-    
+    #builderWrapper
+        form#deckInput(method='POST')
+            label(for='title') Title:
+            input.metadata#deckTitle(type='text' placeholder='Deck Title' name='title')
+            label(for='description') Description:
+            input.metadata#deckDescription(type='text' placeholder='Description of the Deck!' name='description')
+            textarea.deckPanel#mainboard(name='mainboard')
+            textarea.deckPanel#sideboard(name='sideboard')
+            .cardnameWrapper
+                label(for='cardname') Card Name:
+                input#cardnameInput(type='text' placeholder='Card Name' name='cardname')
+                p.hidden Please input a valid Card Name!
+            .cardQuantityWrapper
+                label(for='quantity') Quantity:
+                input#quantityInput(type='text' placeholder='Quantity' name='quantity')
+                p.hidden Please input a number!
+            button#addCard(type='button') Add Card
+            button#submit(type='button')
