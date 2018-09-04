@@ -69,7 +69,7 @@ let updateZones = () => {
 
 // Make an object for each unique card.
 
-function Buttons(location, card) {
+function UniqueCard(location, card) {
     this.name = card
     this.exile = function() {
         if(card.numberInExile === card.totalNumber) {

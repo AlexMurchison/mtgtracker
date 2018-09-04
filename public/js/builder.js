@@ -42,6 +42,7 @@ addCard.onclick = () => {
     console.log(Number(quantityInput.value));
 };
 
+//this is actually an "Update" button, change submit to "Save" later for final push to db
 submit.onclick = () => {
     const arrayOfLines = mainboard.value.split('\n');
     console.log(arrayOfLines);
@@ -58,17 +59,34 @@ submit.onclick = () => {
         console.log(`Invalid Decklist`);
     } /*else if cardname not valid?*/ else {
         arrayOfLines.forEach((line) => {
-            let numberOfCard = line.slice(0, line.indexOf(" "));
+            let numberOfCard = Number(line.slice(0, line.indexOf(" ")));
             let nameOfCard = line.slice(line.indexOf(" ") + 1);
+            /*for i < numberOfCard, query db.cards by cardname (XML req), get the card,
+            delete the ID, push to array*/
             console.log(numberOfCard);
             console.log(nameOfCard);
-            currentDeck.cardsInDeck.push({[nameOfCard]: {"cardname": nameOfCard, "cardQuant": numberOfCard}});
+            currentDeck.uniqueCards.push({[nameOfCard]: {"cardname": nameOfCard, "cardQuant": numberOfCard}});
         });
         currentDeck.name = deckTitle.value;
         currentDeck.description = deckDescription.value;
     }};
 
 console.log(`Hello World, we're live!`);
+
+/*This will be the actual save (submit) button*/
+let postRequest = (url, data) => {
+    return fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+    })
+    .then(res => res.json())
+    .then(res => console.log(`Success: `, JSON.stringify(res)))
+    .catch(err => console.error(`Error: `, err));
+};
+postRequest('./app.js', [])
 
 let autocomplete = (input, array) => {
     let currentFocus;

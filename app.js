@@ -36,7 +36,7 @@ app.get('/assembler', urlencodedParser, (req, res) => {
         console.log('Connected successfully to MTG!');
         const cards = db.collection('cards');
         console.log('Connected successfully to Cards');
-        cards.find({}).toArray((err, documents) => {
+        cards.find({cardName}).toArray((err, documents) => {
             client.close();
         });
     });

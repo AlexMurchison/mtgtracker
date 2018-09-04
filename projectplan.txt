@@ -58,3 +58,12 @@ app/server stuff
             get card info from db, put into "completed deck"
             get card names for autocomplete/verification
 
+_____________________________________________________________________________
+
+Think practically about backend. If something needs to be stitched together, do it client side.
+Each Deck should ideally be 60 unique objects, makes them much easier to manipulate.
+Iterate over objects, pull names, add names to array.
+4 Arrays, one for each zone. Push/pop items from arrays to shift cards.
+Create 60 variables, one for each card? (Easiest to manipulate)
+
+If I need to get card name data, querying based on what's in client side JS, how do I do that?
