@@ -1,9 +1,3 @@
-let currentDeck = {
-    name:"",
-    description:"",
-    uniqueCards:[]
-};
-
 let deckInput = document.getElementById('deckInput');
 let deckTitle = document.getElementById('deckTitle');
 let deckDescription = document.getElementById('deckDescription');
@@ -12,7 +6,10 @@ let sideboard = document.getElementById('sideboard');
 let cardnameInput = document.getElementById('cardnameInput');
 let quantityInput = document.getElementById('quantityInput');
 let addCard = document.getElementById('addCard');
-let submit = document.getElementById('submit')
+let updatePreview = document.getElementById('updatePreview');
+let submit = document.getElementById('submit');
+let previewTitle = document.getElementById('previewTitle');
+let previewDecklist = document.getElementById('previewDecklist');
 
 let cardDiv = document.querySelector('div.cardnameWrapper');
 let quantError = document.querySelector('.cardQuantityWrapper > p.hidden');
@@ -25,6 +22,12 @@ const showError = (errorType) => {
 const hideError = (errorType) => {
     errorType.classList.remove("error");
     errorType.classList.add("hidden");
+};
+
+let currentDeck = {
+    "name":"",
+    "description":"",
+    "uniqueCards":[]
 };
 
 addCard.onclick = () => {
@@ -43,7 +46,7 @@ addCard.onclick = () => {
 };
 
 //this is actually an "Update" button, change submit to "Save" later for final push to db
-submit.onclick = () => {
+updatePreview.onclick = () => {
     const arrayOfLines = mainboard.value.split('\n');
     console.log(arrayOfLines);
 
@@ -58,35 +61,52 @@ submit.onclick = () => {
     if (!arrayOfLines.every(numberCheck)) {
         console.log(`Invalid Decklist`);
     } /*else if cardname not valid?*/ else {
+        currentDeck.name = deckTitle.value;
+        currentDeck.description = deckDescription.value;
+        while (currentDeck.uniqueCards.length > 0) {
+            currentDeck.uniqueCards.pop();
+        }
         arrayOfLines.forEach((line) => {
             let numberOfCard = Number(line.slice(0, line.indexOf(" ")));
             let nameOfCard = line.slice(line.indexOf(" ") + 1);
-            /*for i < numberOfCard, query db.cards by cardname (XML req), get the card,
+            /*for i < numberOfCard, query db.cards by cardname (AJAX req), get the card,
             delete the ID, push to array*/
             console.log(numberOfCard);
             console.log(nameOfCard);
-            currentDeck.uniqueCards.push({[nameOfCard]: {"cardname": nameOfCard, "cardQuant": numberOfCard}});
+            currentDeck.uniqueCards.push({"cardName": nameOfCard, "cardQuant": numberOfCard});
         });
-        currentDeck.name = deckTitle.value;
-        currentDeck.description = deckDescription.value;
-    }};
+        previewTitle.innerText  = `${currentDeck.name}`
+        while (previewDecklist.firstChild) {
+            previewDecklist.removeChild(previewDecklist.firstChild);
+        }
+        currentDeck.uniqueCards.forEach(obj => {
+            let uniqueCard = document.createElement("li");
+            uniqueCard.classList.add('card')
+            uniqueCard.innerText = `${obj.cardName}`
+            previewDecklist.appendChild(uniqueCard);
+            });
+        };
+    };
 
 console.log(`Hello World, we're live!`);
 
 /*This will be the actual save (submit) button*/
 let postRequest = (url, data) => {
     return fetch(url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(data),
         headers: new Headers({
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         }),
     })
     .then(res => res.json())
-    .then(res => console.log(`Success: `, JSON.stringify(res)))
+    .then(res => console.log(`Success: `, res))
     .catch(err => console.error(`Error: `, err));
 };
-postRequest('./app.js', [])
+
+submit.onclick = () => {
+    postRequest("http://localhost:3000/builder", currentDeck);
+};
 
 let autocomplete = (input, array) => {
     let currentFocus;
@@ -106,10 +126,10 @@ let autocomplete = (input, array) => {
                 if (object.toUpperCase().includes(userInput.toUpperCase())) {
                     childBox = document.createElement("div");
 
-                }
-            }
-    })
-})}
+                };
+            };
+    });
+})};
 
 /* let createDeck = () => {
     let uniqueCards = [`Rat Colony`, `Bontu's Monument`, `Swamp`];

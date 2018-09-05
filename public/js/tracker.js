@@ -9,56 +9,56 @@ Cards show up in a list in each Library, sorted by CMC.
 
 let activeDeck = {
     //pull from users.db
-    'name': 'Mono-Red Aggro',
-    'description': "Burn 'em",
-    'uniqueCards': [
+    "name": "Mono-Red Aggro",
+    "description": "Burn 'em",
+    "uniqueCards": [
         {
-            'name': 'Mountain',
-            'totalNumber': 24,
-            'numberInLibrary': 24,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Mountain",
+            "totalNumber": 24,
+            "numberInLibrary": 24,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         },
         {
-            'name': 'Goblin Chainwhirler',
-            'totalNumber': 4,
-            'numberInLibrary': 4,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Goblin Chainwhirler",
+            "totalNumber": 4,
+            "numberInLibrary": 4,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         },
         {
-            'name': 'Hazoret the Fervent',
-            'totalNumber': 4,
-            'numberInLibrary': 4,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Hazoret the Fervent",
+            "totalNumber": 4,
+            "numberInLibrary": 4,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         },
         {
-            'name': 'Soul-Scar Mage',
-            'totalNumber': 4,
-            'numberInLibrary': 4,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Soul-Scar Mage",
+            "totalNumber": 4,
+            "numberInLibrary": 4,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         },
         {
-            'name': 'Bomat Courier',
-            'totalNumber': 4,
-            'numberInLibrary': 4,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Bomat Courier",
+            "totalNumber": 4,
+            "numberInLibrary": 4,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         },
         {
-            'name': 'Glorybringer',
-            'totalNumber': 4,
-            'numberInLibrary': 4,
-            'numberInHand': 0,
-            'numberInGraveyard': 0,
-            'numberInExile': 0
+            "name": "Glorybringer",
+            "totalNumber": 4,
+            "numberInLibrary": 4,
+            "numberInHand": 0,
+            "numberInGraveyard": 0,
+            "numberInExile": 0
         }
     ]
 };
@@ -73,7 +73,7 @@ function UniqueCard(location, card) {
     this.name = card
     this.exile = function() {
         if(card.numberInExile === card.totalNumber) {
-            alert('error')
+            alert("error")
         } else {
         card[location]--
         card.numberInExile++;
@@ -82,7 +82,7 @@ function UniqueCard(location, card) {
     };
     this.discard = function() {
         if(card.numberInGraveyard === card.totalNumber) {
-            alert('error')
+            alert("error")
         } else {
         card[location]--
         card.numberInGraveyard++;
@@ -92,7 +92,7 @@ function UniqueCard(location, card) {
     };
     this.draw = function() {
         if(card.numberInHand === card.totalNumber) {
-            alert('error')
+            alert("error")
         } else {
         card[location]--
         card.numberInHand++;
@@ -101,7 +101,7 @@ function UniqueCard(location, card) {
     };
     this.library = function() {
         if(card.numberInLibrary === card.totalNumber) {
-            alert('error')
+            alert("error")
         } else {
         card[location]--
         card.numberInLibrary++;
@@ -110,18 +110,18 @@ function UniqueCard(location, card) {
     };
 };
 
-let library = document.getElementById('libraryCards');
+let library = document.getElementById("libraryCards");
 
-//I'm cheating here, activeDeck should be pulled from DB
+//I"m cheating here, activeDeck should be pulled from DB
 
-let cardButtons = ['exile', 'graveyard', 'library', 'placespace'];
+let cardButtons = ["exile", "graveyard", "library", "placespace"];
 
 activeDeck.uniqueCards.forEach(cardName => {
-    let uniqueCard = document.createElement('li');
-    cardButtons[i] = document.createElement('button')
+    let uniqueCard = document.createElement("li");
+    cardButtons[i] = document.createElement("button")
     uniqueCard.innerText = `${cardName.name}`
     library.appendChild(uniqueCard);
 });
 
-let deckToPlayspace = document.querySelector('.library > .playspace');
+let deckToPlayspace = document.querySelector(".library > .playspace");
 
