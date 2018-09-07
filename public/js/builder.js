@@ -13,6 +13,7 @@ let previewDecklist = document.getElementById('previewDecklist');
 
 let cardDiv = document.querySelector('div.cardnameWrapper');
 let quantError = document.querySelector('.cardQuantityWrapper > p.hidden');
+let cardError = document.querySelector('.cardnameWrapper > p.hidden');
 
 const showError = (errorType) => {
     errorType.classList.remove("hidden"); 
@@ -71,18 +72,17 @@ updatePreview.onclick = () => {
             let nameOfCard = line.slice(line.indexOf(" ") + 1);
             /*for i < numberOfCard, query db.cards by cardname (AJAX req), get the card,
             delete the ID, push to array*/
-            console.log(numberOfCard);
-            console.log(nameOfCard);
-            currentDeck.uniqueCards.push({cardName: nameOfCard, cardQuant: numberOfCard});
+            postQuery("http://localhost:3000/builder", {cardname: nameOfCard})
         });
         previewTitle.innerText  = `${currentDeck.name}`
         while (previewDecklist.firstChild) {
             previewDecklist.removeChild(previewDecklist.firstChild);
         }
+        debugger;
         currentDeck.uniqueCards.forEach(obj => {
             let uniqueCard = document.createElement("li");
             uniqueCard.classList.add('card');
-            uniqueCard.innerText = `${obj.cardName}`
+            uniqueCard.innerText = `${obj.name}`
             previewDecklist.appendChild(uniqueCard);
             });
         };
@@ -93,14 +93,17 @@ console.log(`Hello World, we're live!`);
 let postQuery = (url, data) => {
     return fetch(url, {
         method: "POST",
-        body: data,
+        body: JSON.stringify(data),
         headers: new Headers({
-            "Content-Type": "text/html"
+            "Content-Type": "application/json"
         }),
     })
-    .then(res => res.json())
-    .then(res => console.log(`Success: `, res))
-    .catch(err => console.log(`Error: `, err));
+    .then((res) => res.json())
+    .then((res) => {
+        currentDeck.uniqueCards.push(res);
+        console.log(res);
+    })
+    .catch((err) => console.log(`Error: `, err));
 };
 
 /*This will be the actual save (submit) button*/
@@ -112,13 +115,16 @@ let putRequest = (url, data) => {
             "Content-Type": "application/json"
         }),
     })
-    .then(res => res.json())
-    .then(res => console.log(`Success: `, res))
-    .catch(err => console.error(`Error: `, err));
+    .then((res) => res.json())
+    .then((res) => console.log(`Success: `, res))
+    .catch((err) => console.error(`Error: `, err));
 };
 
 submit.onclick = () => {
-    postQuery("http://localhost:3000/builder", cardnameInput);
+    let payload = {};
+    payload.cardname = cardnameInput.value;
+    console.log(payload.cardname);
+    postQuery("http://localhost:3000/builder", payload)
 };
 
 // submit.onclick = () => {
