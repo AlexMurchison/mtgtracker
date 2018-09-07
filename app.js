@@ -7,6 +7,7 @@ const url = 'mongodb://localhost:27017';
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
+const textParser = bodyParser.text();
 
 app.use('/assets', express.static('public'));
 app.set('view engine', 'pug');
@@ -42,7 +43,20 @@ app.get('/builder', (req, res) => {
     });
 });
 
-app.post('/builder', jsonParser, (req, res) => {
+app.post('/builder', textParser, (req, res) => {
+    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
+        console.log('Connected successfully to Database!');
+        const db = client.db('mtg');
+        const cards = db.collection('cards')
+        let userInput = req.body;
+        let card = cards.find({$text: {$search: "\"" + userInput + "\""}}).toArray();
+        console.log(card);
+        res.send(card);
+        client.close();
+    })
+});
+
+app.put('/builder', jsonParser, (req, res) => {
     res.send(req.body);
 });
 

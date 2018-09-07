@@ -84,3 +84,5 @@ Create 60 variables, one for each card? (Easiest to manipulate)
 If I need to get card name data, querying based on what's in client side JS, how do I do that?
 
 //db.cards.createIndex({name: "text"})
+
+//db.cards.find({$text: {$search: "\"SEARCHQUERY\""}});

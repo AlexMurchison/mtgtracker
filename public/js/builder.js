@@ -25,9 +25,9 @@ const hideError = (errorType) => {
 };
 
 let currentDeck = {
-    "name":"",
-    "description":"",
-    "uniqueCards":[]
+    name:"",
+    description:"",
+    uniqueCards:[]
 };
 
 addCard.onclick = () => {
@@ -73,7 +73,7 @@ updatePreview.onclick = () => {
             delete the ID, push to array*/
             console.log(numberOfCard);
             console.log(nameOfCard);
-            currentDeck.uniqueCards.push({"cardName": nameOfCard, "cardQuant": numberOfCard});
+            currentDeck.uniqueCards.push({cardName: nameOfCard, cardQuant: numberOfCard});
         });
         previewTitle.innerText  = `${currentDeck.name}`
         while (previewDecklist.firstChild) {
@@ -81,7 +81,7 @@ updatePreview.onclick = () => {
         }
         currentDeck.uniqueCards.forEach(obj => {
             let uniqueCard = document.createElement("li");
-            uniqueCard.classList.add('card')
+            uniqueCard.classList.add('card');
             uniqueCard.innerText = `${obj.cardName}`
             previewDecklist.appendChild(uniqueCard);
             });
@@ -90,10 +90,23 @@ updatePreview.onclick = () => {
 
 console.log(`Hello World, we're live!`);
 
-/*This will be the actual save (submit) button*/
-let postRequest = (url, data) => {
+let postQuery = (url, data) => {
     return fetch(url, {
         method: "POST",
+        body: data,
+        headers: new Headers({
+            "Content-Type": "text/html"
+        }),
+    })
+    .then(res => res.json())
+    .then(res => console.log(`Success: `, res))
+    .catch(err => console.log(`Error: `, err));
+};
+
+/*This will be the actual save (submit) button*/
+let putRequest = (url, data) => {
+    return fetch(url, {
+        method: "PUT",
         body: JSON.stringify(data),
         headers: new Headers({
             "Content-Type": "application/json"
@@ -105,8 +118,12 @@ let postRequest = (url, data) => {
 };
 
 submit.onclick = () => {
-    postRequest("http://localhost:3000/builder", currentDeck);
+    postQuery("http://localhost:3000/builder", cardnameInput);
 };
+
+// submit.onclick = () => {
+//     putRequest("http://localhost:3000/builder", currentDeck);
+// };
 
 let autocomplete = (input, array) => {
     let currentFocus;
