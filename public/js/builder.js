@@ -67,30 +67,27 @@ updatePreview.onclick = () => {
         while (currentDeck.uniqueCards.length > 0) {
             currentDeck.uniqueCards.pop();
         }
+        while (previewDecklist.firstChild) {
+            previewDecklist.removeChild(previewDecklist.firstChild);
+        }
         arrayOfLines.forEach((line) => {
             let numberOfCard = Number(line.slice(0, line.indexOf(" ")));
             let nameOfCard = line.slice(line.indexOf(" ") + 1);
             /*for i < numberOfCard, query db.cards by cardname (AJAX req), get the card,
             delete the ID, push to array*/
-            postQuery("http://localhost:3000/builder", {cardname: nameOfCard})
-        });
-        previewTitle.innerText  = `${currentDeck.name}`
-        while (previewDecklist.firstChild) {
-            previewDecklist.removeChild(previewDecklist.firstChild);
-        }
-        debugger;
-        currentDeck.uniqueCards.forEach(obj => {
+            deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard })
             let uniqueCard = document.createElement("li");
             uniqueCard.classList.add('card');
-            uniqueCard.innerText = `${obj.name}`
+            uniqueCard.innerText = `${nameOfCard} x${numberOfCard}`;
             previewDecklist.appendChild(uniqueCard);
-            });
-        };
+        });
+        previewTitle.innerText = `${currentDeck.name}`;
     };
+};
 
 console.log(`Hello World, we're live!`);
 
-let postQuery = (url, data) => {
+let deckCompiler = (url, quant, data) => {
     return fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
@@ -98,12 +95,14 @@ let postQuery = (url, data) => {
             "Content-Type": "application/json"
         }),
     })
-    .then((res) => res.json())
-    .then((res) => {
-        currentDeck.uniqueCards.push(res);
-        console.log(res);
-    })
-    .catch((err) => console.log(`Error: `, err));
+        .then((res) => res.json())
+        .then((res) => {
+            delete res._id;
+            res.quant = quant;
+            currentDeck.uniqueCards.push(res);
+            console.log(res);
+        })
+        .catch((err) => console.log(`Error: `, err));
 };
 
 /*This will be the actual save (submit) button*/
@@ -120,12 +119,12 @@ let putRequest = (url, data) => {
     .catch((err) => console.error(`Error: `, err));
 };
 
-submit.onclick = () => {
-    let payload = {};
-    payload.cardname = cardnameInput.value;
-    console.log(payload.cardname);
-    postQuery("http://localhost:3000/builder", payload)
-};
+// submit.onclick = () => {
+//     let payload = {};
+//     payload.cardname = cardnameInput.value;
+//     console.log(payload.cardname);
+//     ("http://localhost:3000/builder", payload)
+// };
 
 // submit.onclick = () => {
 //     putRequest("http://localhost:3000/builder", currentDeck);
