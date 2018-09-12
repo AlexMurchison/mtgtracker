@@ -2,6 +2,42 @@ $title-font: normal 24px/1.5 'Open Sans', sans-serif;
 $main-font: Helvetica, sans-serif;
 $primary-color: rgb(0, 0, 0);
 
+#builderWrapper {
+  display: grid;
+  grid-template-columns: 33% 67%;
+  grid-template-rows: 200px 60% auto;
+}
+
+#labelWrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#descriptionWrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#mainboardWrapper {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#cardInputWrapper {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#metaButtonWrapper {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#previewWrapper {
+  grid-column: 2;
+  grid-row: 2;
+}
+
 .hidden {
   visibility: hidden
 }
@@ -10,14 +46,14 @@ $primary-color: rgb(0, 0, 0);
   color: red;
 }
 
-h1.title {
-  font: $title-font;
-  color: $cool-red;
-}
+// h1.title {
+//   font: $title-font;
+//   color: $cool-red;
+// }
 
-div.container {
-  color: $cool-red;
-  background: #fff;
-  width: 100%;
-  box-shadow: $box-shadow-bottom-only;
-}
+// div.container {
+//   color: $cool-red;
+//   background: #fff;
+//   width: 100%;
+//   box-shadow: $box-shadow-bottom-only;
+// }

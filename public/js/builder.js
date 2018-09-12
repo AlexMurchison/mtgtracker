@@ -10,10 +10,23 @@ let updatePreview = document.getElementById('updatePreview');
 let submit = document.getElementById('submit');
 let previewTitle = document.getElementById('previewTitle');
 let previewDecklist = document.getElementById('previewDecklist');
+let creatures = document.getElementById('creatures');
+let spells = document.getElementById('spells');
+let enchantments = document.getElementById('enchantments');
+let planeswalkers = document.getElementById('planeswalkers');
+let land = document.getElementById('land');
+let artifacts = document.getElementById('artifacts');
+let previewSideboard = document.getElementById('previewSideboard');
+let mainboardToggle = document.getElementById('mainboardToggle');
+let sideboardToggle = document.getElementById('sideboardToggle');
+let previewErrors = document.getElementById('previewErrorWrapper');
+let previewName = document.getElementById('previewName');
+let previewQuant = document.getElementById('previewQuant');
 
-let cardDiv = document.querySelector('div.cardnameWrapper');
-let quantError = document.querySelector('.cardQuantityWrapper > p.hidden');
-let cardError = document.querySelector('.cardnameWrapper > p.hidden');
+let cardDiv = document.querySelector('div#cardnameWrapper');
+let quantError = document.querySelector('#cardQuantityWrapper > p.hidden');
+let cardError = document.querySelector('#cardnameWrapper > p.hidden');
+let cardTypes = document.querySelectorAll('.cardtype');
 
 const showError = (errorType) => {
     errorType.classList.remove("hidden"); 
@@ -28,66 +41,214 @@ const hideError = (errorType) => {
 let currentDeck = {
     name:"",
     description:"",
-    uniqueCards:[]
+    uniqueCards:[],
+    mainboardCards: 0,
+    sideboardCards: 0
 };
 
-addCard.onclick = () => {
-        /* if card name doesn't exist in db */
-        /*else*/ if (isNaN(quantityInput.value)) {
-        showError(quantError);
-    } else {
-        if (mainboard.value === '') {
-            mainboard.value = mainboard.value + `${quantityInput.value} ${cardnameInput.value}`
-        } else {
-            mainboard.value = mainboard.value + `\n${quantityInput.value} ${cardnameInput.value}`
-        }
-        hideError(quantError);
-    };
-    console.log(Number(quantityInput.value));
-};
+let deckValid = false;
+let activePanel = 'mainboard'
 
-//this is actually an "Update" button, change submit to "Save" later for final push to db
 updatePreview.onclick = () => {
-    const arrayOfLines = mainboard.value.split('\n');
-    console.log(arrayOfLines);
+    const parsedMainboard = mainboard.value.split('\n');
+    const parsedSideboard = sideboard.value.split('\n');
+    console.log(parsedMainboard);
 
-    let numberCheck = (str) => {
-        console.log(str.slice(0, str.indexOf(" ")));
-        if (isNaN(str.slice(0, str.indexOf(" ")))) {
+    currentDeck.name = deckTitle.value;
+    currentDeck.description = deckDescription.value;
+
+    while (currentDeck.uniqueCards.length > 0) {
+        currentDeck.uniqueCards.pop();
+    };
+
+    cardTypes.forEach((type) => {
+        while (type.childNodes.length > 1) {
+            type.removeChild(type.lastChild);
+        }
+    });
+
+    while (previewName.firstChild) {
+        previewName.removeChild(previewName.lastChild);
+    };
+
+    while (previewQuant.firstChild) {
+        previewQuant.removeChild(previewQuant.lastChild);
+    }
+    currentDeck.mainboardCards = 0
+    currentDeck.sideboardCards = 0
+    previewName.classList.add('toggleOff');
+    previewQuant.classList.add('toggleOff');
+    previewErrors.classList.add('toggleOff');
+    previewTitle.innerText = `${currentDeck.name}`;
+    parsedMainboard.forEach((card, index) => {
+        let numberOfCard = Number(card.slice(0, card.indexOf(" ")));
+        let nameOfCard = card.slice(card.indexOf(" ") + 1);
+        if (isNaN(numberOfCard)) {
+            deckValid = false;
+            previewErrors.classList.remove('toggleOff');
+            previewQuant.classList.remove('toggleOff');
+            let newError = document.createElement('li');
+            newError.classList.add('previewError');
+            newError.innerText = `Please check the number formatting on mainboard line ${index + 1}: <#> <Card Name>`;
+            previewQuant.appendChild(newError);
             return false;
         } else {
-            return true;
-        }
-    }
-    if (!arrayOfLines.every(numberCheck)) {
-        console.log(`Invalid Decklist`);
-    } /*else if cardname not valid?*/ else {
-        currentDeck.name = deckTitle.value;
-        currentDeck.description = deckDescription.value;
-        while (currentDeck.uniqueCards.length > 0) {
-            currentDeck.uniqueCards.pop();
-        }
-        while (previewDecklist.firstChild) {
-            previewDecklist.removeChild(previewDecklist.firstChild);
-        }
-        arrayOfLines.forEach((line) => {
-            let numberOfCard = Number(line.slice(0, line.indexOf(" ")));
-            let nameOfCard = line.slice(line.indexOf(" ") + 1);
-            /*for i < numberOfCard, query db.cards by cardname (AJAX req), get the card,
-            delete the ID, push to array*/
-            deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard })
-            let uniqueCard = document.createElement("li");
-            uniqueCard.classList.add('card');
-            uniqueCard.innerText = `${nameOfCard} x${numberOfCard}`;
-            previewDecklist.appendChild(uniqueCard);
-        });
-        previewTitle.innerText = `${currentDeck.name}`;
-    };
+            getQuery("http://localhost:3000/api/?cardname=" + nameOfCard, (validateCard) => {
+                if (!validateCard) {
+                    previewErrors.classList.remove('toggleOff');
+                    previewName.classList.remove('toggleOff');
+                    let newError = document.createElement('li');
+                    newError.classList.add('previewError');
+                    newError.innerText = `Please check the card name formatting on mainboard line ${index + 1}: <#> <Card Name>`;
+                    previewName.appendChild(newError);
+                    return false;
+                } else {
+                    deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard }, (currentCard) => {
+                        if (currentCard.types.includes('Land')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            land.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else if (currentCard.types.includes('Creature')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            creatures.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else if (currentCard.types.includes('Artifact')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            artifacts.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else if (currentCard.types.includes('Enchantment')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            enchantments.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else if (currentCard.types.includes('Instant') || currentCard.type.includes('Sorcery')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            spells.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else if (currentCard.types.includes('Planeswalker')) {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            planeswalkers.appendChild(newCard);
+                            currentDeck.mainboardCards += numberOfCard;
+                        } else {
+                            /*Fail Case*/
+                        };
+                    });
+                };
+            });
+        };
+    });
+    parsedSideboard.forEach((card, index) => {
+        let numberOfCard = Number(card.slice(0, card.indexOf(" ")));
+        let nameOfCard = card.slice(card.indexOf(" ") + 1);
+        if (isNaN(numberOfCard)) {
+            deckValid = false;
+            previewErrors.classList.remove('toggleOff');
+            previewQuant.classList.remove('toggleOff');
+            let newError = document.createElement('li');
+            newError.classList.add('previewError');
+            newError.innerText = `Please check the number formatting on sideboard line ${index + 1}: <#> <Card Name>`;
+            previewQuant.appendChild(newError);
+        } else {
+            getQuery("http://localhost:3000/api/?cardname=" + nameOfCard, (validateCard) => {
+                if (!validateCard) {
+                    previewErrors.classList.remove('toggleOff');
+                    previewName.classList.remove('toggleOff');
+                    let newError = document.createElement('li');
+                    newError.classList.add('previewError');
+                    newError.innerText = `Please check the card name formatting on sideboard line ${index + 1}: <#> <Card Name>`;
+                    previewName.appendChild(newError);
+                    return false;
+                } else {
+                    deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard }, (currentCard) => {
+                        let newCard = document.createElement("li");
+                        newCard.classList.add('card');
+                        newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                        previewSideboard.appendChild(newCard);
+                        currentDeck.sideboardCards += numberOfCard;
+                    });
+                };
+            });
+        };
+    });
 };
 
 console.log(`Hello World, we're live!`);
 
-let deckCompiler = (url, quant, data) => {
+const pushCard = (queryResult, panel) => {
+    console.log(`Found the following card: `, queryResult);
+    hideError(cardError);
+    hideError(quantError);
+    if (!queryResult) {
+        showError(cardError);
+    } else {
+        if (panel === 'mainboard') {
+            if (mainboard.value === '') {
+                mainboard.value = mainboard.value + `${quantityInput.value} ${queryResult.name}`
+            } else {
+                mainboard.value = mainboard.value + `\n${quantityInput.value} ${queryResult.name}`
+            };
+        } else if (panel === 'sideboard') {
+            if (sideboard.value === '') {
+                sideboard.value = sideboard.value + `${quantityInput.value} ${queryResult.name}`
+            } else {
+                sideboard.value = sideboard.value + `\n${quantityInput.value} ${queryResult.name}`
+            };
+        };
+        deckValid = true;
+    };
+    console.log(Number(quantityInput.value));
+};
+
+mainboardToggle.onclick = () => {
+    activePanel = 'mainboard';
+    sideboard.classList.add('toggleOff');
+    mainboard.classList.remove('toggleOff');
+};
+
+sideboardToggle.onclick = () => {
+    activePanel = 'sideboard';
+    mainboard.classList.add('toggleOff');
+    sideboard.classList.remove('toggleOff');
+};
+
+addCard.onclick = () => {
+    console.log(cardnameInput.value);
+    deckValid = false;
+    if (isNaN(quantityInput.value)) {
+        showError(quantError);
+    } else {
+        debugger;
+        if (activePanel === 'mainboard') {
+            getQuery("http://localhost:3000/api/?cardname=" + cardnameInput.value, pushCard, 'mainboard');
+        } else if (activePanel === 'sideboard') {
+            getQuery("http://localhost:3000/api/?cardname=" + cardnameInput.value, pushCard, 'sideboard');
+        } else {
+            console.log(`Something has gone terribly wrong. Contact me @ emailaddress.com`)
+        }
+    };
+};
+
+let getQuery = (url, callback, panel) => {
+    return fetch(url)
+        .then((res) => res.json())
+        .then((res) => {
+            callback(res, panel);
+        })
+        .catch((err) => console.log(`Error: `, err));
+};
+
+let deckCompiler = (url, quant, data, callback) => {
     return fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
@@ -100,6 +261,7 @@ let deckCompiler = (url, quant, data) => {
             delete res._id;
             res.quant = quant;
             currentDeck.uniqueCards.push(res);
+            callback(res);
             console.log(res);
         })
         .catch((err) => console.log(`Error: `, err));
@@ -119,16 +281,13 @@ let putRequest = (url, data) => {
     .catch((err) => console.error(`Error: `, err));
 };
 
-// submit.onclick = () => {
-//     let payload = {};
-//     payload.cardname = cardnameInput.value;
-//     console.log(payload.cardname);
-//     ("http://localhost:3000/builder", payload)
-// };
-
-// submit.onclick = () => {
-//     putRequest("http://localhost:3000/builder", currentDeck);
-// };
+submit.onclick = () => {
+    if (!deckValid) {
+        console.log(`Deck has not been validated, please Update Preview`);
+    } else {
+        putRequest("http://localhost:3000/builder", currentDeck);
+    };
+};
 
 let autocomplete = (input, array) => {
     let currentFocus;
@@ -152,17 +311,3 @@ let autocomplete = (input, array) => {
             };
     });
 })};
-
-/* let createDeck = () => {
-    let uniqueCards = [`Rat Colony`, `Bontu's Monument`, `Swamp`];
-    function Deck(uniqueInstance, name, decksize, description) {
-        this.name = name;
-        this.cardsInDeck = uniqueInstance;
-        this.decksize = decksize;
-        this.description = description;
-    };
-    let userDeck = new Deck(uniqueCards, `Rat Colony Monument`, 60, `Make lots of rats and then hit your opponent!`);
-    console.log(userDeck.cardsInDeck);
-};
-
-createDeck(); */

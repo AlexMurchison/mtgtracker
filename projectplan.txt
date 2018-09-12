@@ -86,3 +86,7 @@ If I need to get card name data, querying based on what's in client side JS, how
 //db.cards.createIndex({name: "text"})
 
 //db.cards.find({$text: {$search: "\"SEARCHQUERY\""}});
+
+//collection.find({$text: {$search: "\"" + queryInput + "\""}}).toArray((err, docs)
+
+deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard })

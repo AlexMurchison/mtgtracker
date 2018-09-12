@@ -16,8 +16,17 @@ app.set('view engine', 'pug');
 
 const findCards = (db, queryInput, callback) => {
     const collection = db.collection('cards');
-    collection.find({$text: {$search: "\"" + queryInput + "\""}}).toArray((err, docs) => {
-        console.log(`Found the following records`);
+    collection.findOne({$text: {$search: "\"" + queryInput + "\""}}, (err, docs) => {
+        console.log(`Found the following records:`);
+        console.log(docs);
+        callback(docs);
+    });
+};
+
+const findCard = (db, queryInput, callback) => {
+    const collection = db.collection('cards');
+    collection.findOne({$text: {$search: "\"" + queryInput + "\""}}, (err, docs) => {
+        console.log(`Found the following records:`);
         console.log(docs);
         callback(docs);
     });
@@ -38,6 +47,24 @@ app.get('/builder', (req, res) => {
     res.render('builder');
 });
 
+app.get('/api', (req, res) => {
+    let cardname = req.query.cardname;
+    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
+        console.log('Connected correctly to Database!');
+        const db = client.db(dbName);
+        const collection = db.collection('cards');
+        console.log(`Searching for ${cardname}`);;
+        findCard(db, cardname, (doc) => {
+            if (doc == null) {
+                res.send(false);
+            } else {
+                client.close();
+                res.send(doc);
+            }
+        });
+    });
+});
+
 app.post('/builder', jsonParser, (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
         console.log('Connected correctly to Database!');
@@ -46,7 +73,7 @@ app.post('/builder', jsonParser, (req, res) => {
         console.log(userInput);
         findCards(db, userInput, (docs) => {
             client.close();
-            res.send(docs[0]);
+            res.send(docs);
         });
     });
 });

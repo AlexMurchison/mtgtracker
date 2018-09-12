@@ -4,12 +4,13 @@ html
         link(rel="stylesheet" type="text/css" href="assets/css/styles.css")
         block head
     body
-        h1.title Magic the Gathering Tracker
-        block mainbar
-            a.topLinks(href='builder') Deckbuilder
-            a.topLinks(href='tracker') Tracker
+        #headerWrapper
+            h1.title Magic the Gathering Tracker
+            block mainbar
+                a.topLinks(href='builder') Deckbuilder
+                a.topLinks(href='tracker') Tracker
         block content
         block foot
-            .footer
+            #footerWrapper
                 a.footerLinks(href='contact') Contact &nbsp;
                 a.footerLinks(href='about') About Us

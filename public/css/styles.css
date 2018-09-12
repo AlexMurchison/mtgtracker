@@ -1,7 +1,123 @@
+body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 200px 1fr 50px;
+}
+
+#headerWrapper {
+  display: grid;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row: 1;
+}
+
+.title {
+  text-align: center;
+}
+
+#footerWrapper {
+  display: flex;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row: 3;
+}
+
+#builderWrapper {
+  display: grid;
+  grid-column: 2;
+  grid-row: 2; 
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 200px 1fr 400px;
+}
+
+#labelWrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#deckInput {
+  display: grid;
+  width: 400px;
+  grid-column: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-template-columns: 1fr;
+  grid-template-rows: 50px 1fr;
+}
+
+#descriptionWrapper {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#mainboardWrapper {
+  grid-column: 1;
+  grid-row: 2;
+  resize: none;
+}
+
+#mainboard {
+  resize: none;
+  width: 250px;
+  height: 400px;
+}
+
+#sideboard {
+  resize: none;
+  width: 250px;
+  height: 400px;
+}
+
+#cardInputWrapper {
+  display: grid;
+  height: 100px;
+  width: 250px;
+  grid-column: 1;
+  grid-row: 3;
+  grid-template-columns: 125px 125px;
+  grid-template-rows: 50px 50px;
+}
+
+#cardQuantityWrapper {
+  grid-row: 2;
+  grid-column: 1 / 2
+}
+
+#cardnameInput {
+  grid-row:1;
+}
+
+#quantityInput {
+  width: 30px;
+  text-align: center;
+  grid-row: 2;
+  grid-column: 1;
+}
+
+#addCard {
+  grid-row: 2;
+  grid-column: 2;
+}
+
 .hidden {
   visibility: hidden;
 }
 
+.toggleOff {
+  display: none;
+}
+
 .error {
   color: red;
+}
+
+
+#metaButtonWrapper {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#previewWrapper {
+  grid-column: 2;
+  grid-row: 1 / 3;
 }

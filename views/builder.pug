@@ -11,25 +11,45 @@ block head
 block content
     #builderWrapper
         form#deckInput(method='POST')
-            label(for='title') Title:
-            input.metadata#deckTitle(type='text' placeholder='Deck Title' name='title')
-            label(for='description') Description:
-            input.metadata#deckDescription(type='text' placeholder='Description of the Deck!' name='description')
-            textarea.deckPanel#mainboard(name='mainboard')
-            textarea.deckPanel#sideboard(name='sideboard')
-            .cardnameWrapper
-                label(for='cardname') Card Name:
-                input#cardnameInput(type='text' placeholder='Card Name' name='cardname')
-                p.hidden Please input a valid Card Name!
-            .cardQuantityWrapper
-                label(for='quantity') Quantity:
-                input#quantityInput(type='text' placeholder='Quantity' name='quantity')
-                p.hidden Please input a number!
-            button#addCard(type='button') Add Card
+            #labelWrapper
+                label(for='title') Title:
+                input.metadata#deckTitle(type='text' placeholder='Deck Title' name='title')
+            #descriptionWrapper    
+                label(for='description') Description:
+                textarea.metadata#deckDescription(type='text' placeholder='Description of the Deck!' name='description')
+            #mainboardWrapper
+                button#mainboardToggle(type= 'button') Mainboard
+                button#sideboardToggle(type= 'button') Sideboard
+                textarea.deckPanel#mainboard(name='mainboard')
+                textarea.deckPanel.toggleOff#sideboard(name='sideboard')
+            #cardInputWrapper
+                #cardnameWrapper
+                    label(for='cardname') Card Name:
+                    input#cardnameInput(type='text' placeholder='Card Name' name='cardname')
+                    p.hidden Please input a valid Card Name!
+                #cardQuantityWrapper
+                    label(for='quantity') Quantity:
+                    input#quantityInput(type='text' placeholder='Quantity' name='quantity')
+                    p.hidden Please input a number!
+                button#addCard(type='button') Add Card
+        #metaButtonWrapper
             button#updatePreview(type='button') Update Preview
             button#submit(type='button') Save
-        #previewPanel
+        #previewWrapper
+            #previewErrorWrapper.toggleOff Decklist is invalid for the following reasons:
+                br
+                label(for='previewName') Invalid Card Names:
+                ul#previewName.toggleOff(name='previewName')
+                label(for='previewQuant')  Invalid Card Numbers:
+                ul#previewQuant.toggleOff(name='previewQuant')
             p#previewTitle Placeholder Title
-                ol#previewDecklist
+                ul#previewDecklist
+                    ul#creatures.cardtype Creatures
+                    ul#spells.cardtype Instants &amp; Sorceries
+                    ul#artifacts.cardtype Artifacts
+                    ul#enchantments.cardtype Enchantments
+                    ul#planeswalkers.cardtype Planeswalkers
+                    ul#land.cardtype Land
+                    ul#previewSideboard.cardtype Sideboard
 
 
