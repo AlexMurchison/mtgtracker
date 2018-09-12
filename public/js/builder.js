@@ -55,7 +55,7 @@ updatePreview.onclick = () => {
     console.log(parsedMainboard);
 
     currentDeck.name = deckTitle.value;
-    currentDeck.description = deckDescription.value;
+    // currentDeck.description = deckDescription.value;
 
     while (currentDeck.uniqueCards.length > 0) {
         currentDeck.uniqueCards.pop();
@@ -228,7 +228,6 @@ addCard.onclick = () => {
     if (isNaN(quantityInput.value)) {
         showError(quantError);
     } else {
-        debugger;
         if (activePanel === 'mainboard') {
             getQuery("http://localhost:3000/api/?cardname=" + cardnameInput.value, pushCard, 'mainboard');
         } else if (activePanel === 'sideboard') {

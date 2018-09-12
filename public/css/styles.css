@@ -1,11 +1,23 @@
 body {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 200px 1fr 50px;
+  grid-template-columns: 15% 1fr 10%;
+  grid-template-rows: 20% 1fr 15px;
+  margin: 0 0 0 0;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.toggleOff {
+  display: none;
+}
+
+.error {
+  color: red;
 }
 
 #headerWrapper {
-  display: grid;
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row: 1;
@@ -13,6 +25,8 @@ body {
 
 .title {
   text-align: center;
+  font-size: 32pt;
+  font-weight: bold;
 }
 
 #footerWrapper {
@@ -26,46 +40,71 @@ body {
   display: grid;
   grid-column: 2;
   grid-row: 2; 
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: 200px 1fr 400px;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 75px 1fr 75px;
 }
 
-#labelWrapper {
-  grid-column: 1;
+#metaDataWrapper {
+  grid-column: 1 / 3;
   grid-row: 1;
 }
 
-#deckInput {
-  display: grid;
-  width: 400px;
-  grid-column: 1;
-  grid-row-start: 1;
-  grid-row-end: 3;
-  grid-template-columns: 1fr;
-  grid-template-rows: 50px 1fr;
+label, input {
+  display: block;
+}
+
+#titleWrapper {
+  grid-row: 1;
+  grid-column: 1 / 2;
+  width: 100%;
+}
+
+#titleWrapper > label {
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+#titleWrapper > input {
+  width: 100%;
 }
 
 #descriptionWrapper {
+  grid-row: 2;
+  height: 100%;
+}
+
+#descriptionWrapper > textarea {
+  resize: none;
+  height: 90%;
+  width: 100%;
+  padding: 0 0 0 0;
+}
+
+#deckInput {
   grid-column: 1;
-  grid-row: 1;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
 
 #mainboardWrapper {
   grid-column: 1;
   grid-row: 2;
   resize: none;
+  justify-content: center;
 }
 
 #mainboard {
   resize: none;
   width: 250px;
   height: 400px;
+  margin: 0 auto;
 }
 
 #sideboard {
   resize: none;
   width: 250px;
   height: 400px;
+  margin: 0 auto;
 }
 
 #cardInputWrapper {
@@ -76,6 +115,7 @@ body {
   grid-row: 3;
   grid-template-columns: 125px 125px;
   grid-template-rows: 50px 50px;
+  margin: 0 auto;
 }
 
 #cardQuantityWrapper {
@@ -99,19 +139,6 @@ body {
   grid-column: 2;
 }
 
-.hidden {
-  visibility: hidden;
-}
-
-.toggleOff {
-  display: none;
-}
-
-.error {
-  color: red;
-}
-
-
 #metaButtonWrapper {
   grid-column: 1;
   grid-row: 3;
@@ -119,5 +146,30 @@ body {
 
 #previewWrapper {
   grid-column: 2;
-  grid-row: 1 / 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
+
+#previewTitle {
+  font-size: 20pt;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+#previewDecklist {
+  border: 2px solid black;
+  height: 100%;
+  padding: 10px 40px 0px 0px;
+  margin: 0px 0px 0px 0px;
+}
+
+.cardtype {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.card {
+  font-size: 10pt;
+  font-weight: normal;
+}
+
