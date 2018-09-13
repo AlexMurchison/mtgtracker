@@ -7,8 +7,9 @@ html
         #headerWrapper
             h1.title Magic the Gathering Tracker
             block mainbar
-                a.topLinks(href='builder') Deckbuilder
-                a.topLinks(href='tracker') Tracker
+                #linksWrapper
+                    a.topLinks(href='builder') Deckbuilder
+                    a.topLinks(href='tracker') Tracker
         block content
         block foot
             #footerWrapper

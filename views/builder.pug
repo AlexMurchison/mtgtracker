@@ -19,7 +19,7 @@ block content
             //-     textarea.metadata#deckDescription(type='text' placeholder='Description of the Deck!' name='description')
         form#deckInput(method='POST')
             #mainboardWrapper
-                button#mainboardToggle(type= 'button') Mainboard
+                button.toggleOn#mainboardToggle(type= 'button') Mainboard
                 button#sideboardToggle(type= 'button') Sideboard
                 textarea.deckPanel#mainboard(name='mainboard')
                 textarea.deckPanel.toggleOff#sideboard(name='sideboard')
@@ -38,7 +38,6 @@ block content
             button#submit(type='button') Save
         #previewWrapper
             #previewErrorWrapper.toggleOff Decklist is invalid for the following reasons:
-                br
                 label(for='previewName') Invalid Card Names:
                 ul#previewName.toggleOff(name='previewName')
                 label(for='previewQuant')  Invalid Card Numbers:

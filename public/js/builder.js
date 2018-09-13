@@ -82,7 +82,7 @@ updatePreview.onclick = () => {
     previewTitle.innerText = `${currentDeck.name}`;
     parsedMainboard.forEach((card, index) => {
         let numberOfCard = Number(card.slice(0, card.indexOf(" ")));
-        let nameOfCard = card.slice(card.indexOf(" ") + 1);
+        let nameOfCard = card.slice(card.indexOf(" ") + 1).trim();
         if (isNaN(numberOfCard)) {
             deckValid = false;
             previewErrors.classList.remove('toggleOff');
@@ -213,13 +213,17 @@ const pushCard = (queryResult, panel) => {
 mainboardToggle.onclick = () => {
     activePanel = 'mainboard';
     sideboard.classList.add('toggleOff');
+    sideboardToggle.classList.remove('toggleOn');
     mainboard.classList.remove('toggleOff');
+    mainboardToggle.classList.add('toggleOn');
 };
 
 sideboardToggle.onclick = () => {
     activePanel = 'sideboard';
     mainboard.classList.add('toggleOff');
+    mainboardToggle.classList.remove('toggleOn');
     sideboard.classList.remove('toggleOff');
+    sideboardToggle.classList.add('toggleOn');
 };
 
 addCard.onclick = () => {
