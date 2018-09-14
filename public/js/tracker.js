@@ -14,7 +14,7 @@ let activeDeck = {
     "uniqueCards": [
         {
             "name": "Mountain",
-            "totalNumber": 24,
+            "quant": 24,
             "numberInLibrary": 24,
             "numberInHand": 0,
             "numberInGraveyard": 0,
@@ -22,7 +22,7 @@ let activeDeck = {
         },
         {
             "name": "Goblin Chainwhirler",
-            "totalNumber": 4,
+            "quant": 4,
             "numberInLibrary": 4,
             "numberInHand": 0,
             "numberInGraveyard": 0,
@@ -30,7 +30,7 @@ let activeDeck = {
         },
         {
             "name": "Hazoret the Fervent",
-            "totalNumber": 4,
+            "quant": 4,
             "numberInLibrary": 4,
             "numberInHand": 0,
             "numberInGraveyard": 0,
@@ -38,7 +38,7 @@ let activeDeck = {
         },
         {
             "name": "Soul-Scar Mage",
-            "totalNumber": 4,
+            "quant": 4,
             "numberInLibrary": 4,
             "numberInHand": 0,
             "numberInGraveyard": 0,
@@ -46,7 +46,7 @@ let activeDeck = {
         },
         {
             "name": "Bomat Courier",
-            "totalNumber": 4,
+            "quant": 4,
             "numberInLibrary": 4,
             "numberInHand": 0,
             "numberInGraveyard": 0,

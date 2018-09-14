@@ -52,7 +52,6 @@ app.get('/api', (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
         console.log('Connected correctly to Database!');
         const db = client.db(dbName);
-        const collection = db.collection('cards');
         console.log(`Searching for ${cardname}`);;
         findCard(db, cardname, (doc) => {
             if (doc == null) {
@@ -78,8 +77,45 @@ app.post('/builder', jsonParser, (req, res) => {
     });
 });
 
+const updateDecks = (db, deckName, deckInput, callback) => {
+    const collection = db.collection('users');
+    collection.updateOne({username: "Rush"}, {$addToSet : {decks: deckInput}});
+    console.log(deckInput);
+    callback();
+};
+
+const findDecks = (db, callback) => {
+    const collection = db.collection('users');
+    collection.findOne({username: 'Rush'}, (err, docs) => {
+        console.log(`Found the following records:`);
+        console.log(docs);
+        callback(docs);
+    });
+};
+
+
+app.get('/decklist', jsonParser, (req, res) => {
+    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
+        console.log('Connected correctly to Database!');
+        const db = client.db(dbName);
+        findDecks(db, (docs) => {
+            client.close();
+            res.send(docs);
+        });
+    });
+});
+
 app.put('/builder', jsonParser, (req, res) => {
-    res.send(req.body);
+    MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
+        console.log('Connected correctly to Database!');
+        const db = client.db(dbName);
+        let currentDeck = req.body.deck;
+        console.log(currentDeck);
+        updateDecks(db, currentDeck.name, currentDeck, () => {
+            client.close();
+            res.sendStatus(200);
+        });
+    });
 });
 
 app.get('/tracker', (req, res) => {

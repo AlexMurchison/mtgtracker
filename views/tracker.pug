@@ -5,13 +5,14 @@ block head
     script(src='/assets/js/tracker.js' defer)
 
 block content
-    .wrapper
+    #trackerWrapper
         .decks
             ul.decksList
                 //- each deck in userDecks
                 //-     li=deck
         .exile
             ol.cards#exileCards Exile
+            
             +zoneChange('graveyard', 'Graveyard')
             +zoneChange('deck', 'Library')
             +zoneChange('playspace', 'Hand')

@@ -10,6 +10,11 @@ html
                 #linksWrapper
                     a.topLinks(href='builder') Deckbuilder
                     a.topLinks(href='tracker') Tracker
+        #sidebarWrapper
+            h2#decksHeader Decks
+                ul#listOfDecks
+                    //- buttons
+            button(type='button') Reload
         block content
         block foot
             #footerWrapper

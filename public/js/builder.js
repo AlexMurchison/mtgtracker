@@ -28,6 +28,36 @@ let quantError = document.querySelector('#cardQuantityWrapper > p.hidden');
 let cardError = document.querySelector('#cardnameWrapper > p.hidden');
 let cardTypes = document.querySelectorAll('.cardtype');
 
+let sidebardWrapper = document.getElementById('sidebarWrapper');
+let listOfDecks = document.getElementById('listOfDecks');
+
+window.onload = () => {
+    getDecks('http://localhost:3000/decklist', (queryResult) => {
+        console.log(queryResult)
+        queryResult.decks.forEach((newDeck) => {
+        console.log(newDeck);
+        let deckWrapper = document.createElement("li");
+        let deckButton = document.createElement("button")
+        deckWrapper.classList.add('deck');
+        deckButton.setAttribute('type', 'button');
+        deckButton.innerText = newDeck.name;
+        deckWrapper.appendChild(deckButton);
+        listOfDecks.appendChild(deckWrapper);
+        });
+    });
+};
+
+let getDecks = (url, callback) => {
+    return fetch(url)
+        .then((res) => res.json())
+        .then((res) => {
+            callback(res);
+        })
+        .catch((err) => console.log(`Error: `, err));
+};
+
+
+
 const showError = (errorType) => {
     errorType.classList.remove("hidden"); 
     errorType.classList.add("error");
@@ -40,7 +70,6 @@ const hideError = (errorType) => {
 
 let currentDeck = {
     name:"",
-    description:"",
     uniqueCards:[],
     mainboardCards: 0,
     sideboardCards: 0
@@ -141,46 +170,50 @@ updatePreview.onclick = () => {
                             planeswalkers.appendChild(newCard);
                             currentDeck.mainboardCards += numberOfCard;
                         } else {
-                            /*Fail Case*/
+                            window.alert(`Something went horribly wrong. Please contact me! (link below)`);
                         };
                     });
+                    deckValid = true;
                 };
             });
         };
     });
-    parsedSideboard.forEach((card, index) => {
-        let numberOfCard = Number(card.slice(0, card.indexOf(" ")));
-        let nameOfCard = card.slice(card.indexOf(" ") + 1);
-        if (isNaN(numberOfCard)) {
-            deckValid = false;
-            previewErrors.classList.remove('toggleOff');
-            previewQuant.classList.remove('toggleOff');
-            let newError = document.createElement('li');
-            newError.classList.add('previewError');
-            newError.innerText = `Please check the number formatting on sideboard line ${index + 1}: <#> <Card Name>`;
-            previewQuant.appendChild(newError);
-        } else {
-            getQuery("http://localhost:3000/api/?cardname=" + nameOfCard, (validateCard) => {
-                if (!validateCard) {
-                    previewErrors.classList.remove('toggleOff');
-                    previewName.classList.remove('toggleOff');
-                    let newError = document.createElement('li');
-                    newError.classList.add('previewError');
-                    newError.innerText = `Please check the card name formatting on sideboard line ${index + 1}: <#> <Card Name>`;
-                    previewName.appendChild(newError);
-                    return false;
-                } else {
-                    deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard }, (currentCard) => {
-                        let newCard = document.createElement("li");
-                        newCard.classList.add('card');
-                        newCard.innerText = `${nameOfCard} x${numberOfCard}`;
-                        previewSideboard.appendChild(newCard);
-                        currentDeck.sideboardCards += numberOfCard;
-                    });
-                };
-            });
-        };
-    });
+    if (!sideboard.value.trim() == '') {
+        parsedSideboard.forEach((card, index) => {
+            let numberOfCard = Number(card.slice(0, card.indexOf(" ")));
+            let nameOfCard = card.slice(card.indexOf(" ") + 1).trim();
+            if (isNaN(numberOfCard)) {
+                deckValid = false;
+                previewErrors.classList.remove('toggleOff');
+                previewQuant.classList.remove('toggleOff');
+                let newError = document.createElement('li');
+                newError.classList.add('previewError');
+                newError.innerText = `Please check the number formatting on sideboard line ${index + 1}: <#> <Card Name>`;
+                previewQuant.appendChild(newError);
+            } else {
+                getQuery("http://localhost:3000/api/?cardname=" + nameOfCard, (validateCard) => {
+                    if (!validateCard) {
+                        previewErrors.classList.remove('toggleOff');
+                        previewName.classList.remove('toggleOff');
+                        let newError = document.createElement('li');
+                        newError.classList.add('previewError');
+                        newError.innerText = `Please check the card name formatting on sideboard line ${index + 1}: <#> <Card Name>`;
+                        previewName.appendChild(newError);
+                        return false;
+                    } else {
+                        deckCompiler("http://localhost:3000/builder", numberOfCard, { cardname: nameOfCard }, (currentCard) => {
+                            let newCard = document.createElement("li");
+                            newCard.classList.add('card');
+                            newCard.innerText = `${nameOfCard} x${numberOfCard}`;
+                            previewSideboard.appendChild(newCard);
+                            currentDeck.sideboardCards += numberOfCard;
+                        });
+                    };
+                });
+                deckValid = true;
+            };
+        });
+    };
 };
 
 console.log(`Hello World, we're live!`);
@@ -205,7 +238,6 @@ const pushCard = (queryResult, panel) => {
                 sideboard.value = sideboard.value + `\n${quantityInput.value} ${queryResult.name}`
             };
         };
-        deckValid = true;
     };
     console.log(Number(quantityInput.value));
 };
@@ -279,16 +311,16 @@ let putRequest = (url, data) => {
             "Content-Type": "application/json"
         }),
     })
-    .then((res) => res.json())
     .then((res) => console.log(`Success: `, res))
     .catch((err) => console.error(`Error: `, err));
 };
 
 submit.onclick = () => {
-    if (!deckValid) {
+    if (!deckValid || currentDeck.quant < 60 || currentDeck.name == '') {
         console.log(`Deck has not been validated, please Update Preview`);
+        window.alert(`This deck can not be saved! Please update the preview, and make sure you have at least 60 cards in your deck.`);
     } else {
-        putRequest("http://localhost:3000/builder", currentDeck);
+        putRequest("http://localhost:3000/builder", {"username": 'Rush', deck: currentDeck});
     };
 };
 
@@ -312,5 +344,6 @@ let autocomplete = (input, array) => {
 
                 };
             };
-    });
-})};
+        });
+    })
+};
