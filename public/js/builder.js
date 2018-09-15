@@ -317,7 +317,6 @@ let putRequest = (url, data) => {
 
 submit.onclick = () => {
     if (!deckValid || currentDeck.quant < 60 || currentDeck.name == '') {
-        console.log(`Deck has not been validated, please Update Preview`);
         window.alert(`This deck can not be saved! Please update the preview, and make sure you have at least 60 cards in your deck.`);
     } else {
         putRequest("http://localhost:3000/builder", {"username": 'Rush', deck: currentDeck});

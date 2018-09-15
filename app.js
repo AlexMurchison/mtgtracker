@@ -13,10 +13,9 @@ const dbName = 'mtg';
 app.use('/assets', express.static('public'));
 app.set('view engine', 'pug');
 
-
 const findCards = (db, queryInput, callback) => {
     const collection = db.collection('cards');
-    collection.findOne({$text: {$search: "\"" + queryInput + "\""}}, (err, docs) => {
+    collection.findOne({name: queryInput}, (err, docs) => {
         console.log(`Found the following records:`);
         console.log(docs);
         callback(docs);
@@ -35,11 +34,6 @@ const findCard = (db, queryInput, callback) => {
 app.get('/', (req, res) => {
     console.log('Connected successfully to Home!');
     res.render('index')
-});
-
-// How to retrieve data from client side js?
-app.get('/assembler', urlencodedParser, (req, res) => {
-    const mainboard = req.body.mainboard;
 });
 
 app.get('/builder', (req, res) => {
@@ -92,7 +86,6 @@ const findDecks = (db, callback) => {
         callback(docs);
     });
 };
-
 
 app.get('/decklist', jsonParser, (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {

@@ -248,3 +248,18 @@ label, input {
   padding-left: 2px
 }
 
+#decksHeader {
+  text-align: center;
+}
+
+#listOfDecks {
+  padding: 0px 0px 0px 0px;
+}
+
+#listOfDecks li {
+  list-style-type: none;
+}
+
+#reload {
+  margin-left: 80px;
+}
